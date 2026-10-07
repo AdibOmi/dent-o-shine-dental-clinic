@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { MoveHorizontal } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Expand, MoveHorizontal, X } from 'lucide-react';
 import { useLang } from '../i18n';
 import { IMAGES } from '../data/content';
 import { Img, Reveal, SectionHead } from './shared';
@@ -52,21 +52,95 @@ export default function Results() {
         <Reveal>
           <h3 className="gallery-title">{r.galleryTitle}</h3>
         </Reveal>
-        <div className="gallery">
-          {IMAGES.gallery.map((src, i) => (
-            <motion.div
-              key={i}
-              className={`gallery-item g-${i}`}
-              initial={{ opacity: 0, scale: 0.92 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, delay: i * 0.07 }}
-            >
-              <Img src={src} alt={`Dent-O-Shine gallery ${i + 1}`} />
-            </motion.div>
-          ))}
-        </div>
+        <Gallery images={IMAGES.gallery} />
       </div>
     </section>
+  );
+}
+
+/** Masonry gallery (handles any count / mixed orientations) with a lightbox. */
+function Gallery({ images }) {
+  const [open, setOpen] = useState(null);
+  const count = images.length;
+  const go = (d) => setOpen((i) => (i + d + count) % count);
+
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setOpen(null);
+      if (e.key === 'ArrowRight') go(1);
+      if (e.key === 'ArrowLeft') go(-1);
+    };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  return (
+    <>
+      <div className="gallery">
+        {images.map((src, i) => (
+          <motion.button
+            key={src}
+            className="gallery-item"
+            onClick={() => setOpen(i)}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
+            aria-label={`Open photo ${i + 1}`}
+          >
+            <Img src={src} alt={`Dent-O-Shine clinic photo ${i + 1}`} />
+            <span className="gallery-zoom">
+              <Expand size={20} />
+            </span>
+          </motion.button>
+        ))}
+      </div>
+
+      <AnimatePresence>
+        {open !== null && (
+          <motion.div
+            className="lightbox"
+            onClick={() => setOpen(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={open}
+                src={images[open]}
+                alt={`Dent-O-Shine clinic photo ${open + 1}`}
+                onClick={(e) => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.25 }}
+              />
+            </AnimatePresence>
+            <button className="lb-btn lb-close" onClick={() => setOpen(null)} aria-label="Close">
+              <X />
+            </button>
+            {count > 1 && (
+              <>
+                <button className="lb-btn lb-prev" onClick={(e) => (e.stopPropagation(), go(-1))} aria-label="Previous photo">
+                  <ChevronLeft />
+                </button>
+                <button className="lb-btn lb-next" onClick={(e) => (e.stopPropagation(), go(1))} aria-label="Next photo">
+                  <ChevronRight />
+                </button>
+              </>
+            )}
+            <span className="lb-count">
+              {open + 1} / {count}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

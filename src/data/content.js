@@ -2,6 +2,7 @@
 //  All editable site content lives in this file.
 //  To use your own photos: drop them in /public/images/ and
 //  replace the URLs below with e.g. '/images/dr-ayesha.jpg'.
+//  Clinic gallery photos: just drop them into src/assets/clinic/.
 // ─────────────────────────────────────────────────────────────
 
 const u = (id, w = 900, extra = '') =>
@@ -44,16 +45,31 @@ export const IMAGES = {
     crowns: u('1468493858157-0da44aaf1d13', 700),
     pediatric: u('1606265752439-1f18756aa5fc', 700),
   },
-  // TODO: replace with real cases (braces, smile makeovers, etc.)
-  gallery: [
-    u('1609840114035-3c981b782dfe', 800),
-    u('1609207825181-52d3214556dd', 800),
-    u('1598256989800-fe5f95da9787', 800),
-    u('1606811971618-4486d14f3f99', 800),
-    u('1600170311833-c2cf5280ce49', 800),
-    u('1606811841689-23dfddce3e95', 800),
-  ],
+  // "From our clinic" — loaded automatically from src/assets/clinic/ (see below).
+  gallery: [],
 };
+
+// Every image dropped into src/assets/clinic/ appears in the gallery,
+// ordered by filename (01.jpg, 02.jpg, ...). Stock photos are shown until then.
+const clinicPhotos = Object.entries(
+  import.meta.glob('../assets/clinic/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP}', {
+    eager: true,
+    import: 'default',
+  })
+)
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, url]) => url);
+
+IMAGES.gallery = clinicPhotos.length
+  ? clinicPhotos
+  : [
+      u('1609840114035-3c981b782dfe', 1200),
+      u('1609207825181-52d3214556dd', 1200),
+      u('1598256989800-fe5f95da9787', 1200),
+      u('1606811971618-4486d14f3f99', 1200),
+      u('1600170311833-c2cf5280ce49', 1200),
+      u('1606811841689-23dfddce3e95', 1200),
+    ];
 
 const SERVICE_KEYS = ['braces', 'rootCanal', 'implants', 'whitening', 'scaling', 'surgery', 'crowns', 'pediatric'];
 

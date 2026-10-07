@@ -41,8 +41,8 @@ export function Logo({ size = 40 }) {
     <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
       <defs>
         <linearGradient id="logo-g" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#4cc792" />
-          <stop offset="1" stopColor="#1f9e6c" />
+          <stop offset="0" stopColor="#2fc495" />
+          <stop offset="1" stopColor="#0e9f9a" />
         </linearGradient>
       </defs>
       <path
