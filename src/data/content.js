@@ -32,12 +32,10 @@ export const IMAGES = {
   // Hero shows the clinic; the doctor appears in the About section
   // (and as a small avatar on the hero badge) so her photo isn't repeated large.
   // TODO: a photo of the real Dent-O-Shine chamber works great here.
-  hero: u('1629909613638-0e4a1fad8f81', 900, '&h=1100'),
+  // Full landscape frame (no crop) so CSS can aim at the chair on every screen size
+  hero: `https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&w=1400&q=80`,
   doctor: doctorImg,
   doctorAvatar: doctorAvatarImg,
-  // "Why us" visuals: generic dental tech (not rooms, so they don't pass as our clinic)
-  why: u('1600170311833-c2cf5280ce49', 1200),
-  why2: u('1606811841689-23dfddce3e95', 900),
   services: {
     braces: u('1609840114035-3c981b782dfe', 700),
     rootCanal: u('1588776814546-1ffcf47267a5', 700),
@@ -125,16 +123,6 @@ const en = {
       crowns: { title: 'Crowns & Bridges', desc: 'Restore broken or missing teeth with strong, tooth-coloured caps.' },
       pediatric: { title: 'Pediatric Dentistry', desc: 'Friendly, fear-free dental care designed for children.' },
     },
-  },
-  why: {
-    eyebrow: 'Why Dent-O-Shine',
-    title: 'Modern dentistry with a gentle touch',
-    items: [
-      { title: 'Specialist-led', desc: 'Treatment planned by a post-graduate trained oral surgeon.' },
-      { title: 'Strict sterilisation', desc: 'Autoclaved instruments and single-use disposables for every patient.' },
-      { title: 'Painless approach', desc: 'Modern anaesthesia and techniques that keep you comfortable.' },
-      { title: 'Convenient evenings', desc: 'Open every evening so you can visit after work or school.' },
-    ],
   },
   results: {
     eyebrow: 'Real results',
@@ -226,16 +214,6 @@ const bn = {
       crowns: { title: 'ক্রাউন ও ব্রিজ', desc: 'ভাঙা বা হারানো দাঁত মজবুত ও দাঁতের রঙের ক্যাপে পুনর্গঠন।' },
       pediatric: { title: 'শিশু দন্তচিকিৎসা', desc: 'শিশুদের জন্য বন্ধুসুলভ ও ভয়মুক্ত দাঁতের চিকিৎসা।' },
     },
-  },
-  why: {
-    eyebrow: 'কেন ডেন্ট-ও-শাইন',
-    title: 'আধুনিক দন্তচিকিৎসা, কোমল যত্নে',
-    items: [
-      { title: 'বিশেষজ্ঞ চিকিৎসা', desc: 'পোস্ট-গ্র্যাজুয়েট প্রশিক্ষিত ওরাল সার্জনের পরিকল্পনায় চিকিৎসা।' },
-      { title: 'কঠোর জীবাণুমুক্তকরণ', desc: 'প্রতিটি রোগীর জন্য অটোক্লেভড যন্ত্র ও একবার ব্যবহারযোগ্য সামগ্রী।' },
-      { title: 'ব্যথামুক্ত পদ্ধতি', desc: 'আধুনিক অ্যানেসথেসিয়া ও কৌশলে আরামদায়ক চিকিৎসা।' },
-      { title: 'সুবিধাজনক সন্ধ্যা', desc: 'প্রতি সন্ধ্যায় খোলা — অফিস বা স্কুলের পরেই আসুন।' },
-    ],
   },
   results: {
     eyebrow: 'আসল ফলাফল',
