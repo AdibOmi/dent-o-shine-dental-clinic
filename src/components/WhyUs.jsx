@@ -30,8 +30,8 @@ export default function WhyUs() {
           </div>
         </div>
         <Reveal x={40} y={0} className="why-visual">
-          <Img src={IMAGES.clinic} alt="Dent-O-Shine clinic" className="why-img-main" />
-          <Img src={IMAGES.clinic2} alt="Dental chair" className="why-img-small" />
+          <Img src={IMAGES.why} alt="Digital dental imaging" className="why-img-main" />
+          <Img src={IMAGES.why2} alt="Dentist explaining treatment to a patient" className="why-img-small" />
         </Reveal>
       </div>
     </section>

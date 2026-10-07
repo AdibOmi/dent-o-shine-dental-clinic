@@ -1,73 +1,126 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Expand, MoveHorizontal, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Expand, ShieldCheck, X } from 'lucide-react';
 import { useLang } from '../i18n';
-import { IMAGES } from '../data/content';
+import { CASES, IMAGES } from '../data/content';
 import { Img, Reveal, SectionHead } from './shared';
-
-/**
- * Draggable before/after comparison. Pass a separate `before` image once
- * real patient photos are available; until then a stain filter is applied
- * to the `after` image to simulate the "before" state.
- */
-function BeforeAfter({ before, after, labels }) {
-  const [pos, setPos] = useState(50);
-  const simulated = !before;
-  return (
-    <div className="ba">
-      <Img src={after} alt={labels.after} className="ba-img" />
-      <div className="ba-before" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-        <Img src={before || after} alt={labels.before} className={`ba-img ${simulated ? 'ba-stained' : ''}`} />
-      </div>
-      <span className="ba-label left">{labels.before}</span>
-      <span className="ba-label right">{labels.after}</span>
-      <div className="ba-handle" style={{ left: `${pos}%` }}>
-        <span>
-          <MoveHorizontal size={20} />
-        </span>
-      </div>
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value={pos}
-        onChange={(e) => setPos(Number(e.target.value))}
-        aria-label="Compare before and after"
-      />
-    </div>
-  );
-}
 
 export default function Results() {
   const { t } = useLang();
   const r = t.results;
+  // { images, captions, index } while the lightbox is open
+  const [viewer, setViewer] = useState(null);
+
   return (
     <section id="results" className="section results">
       <div className="container">
         <SectionHead eyebrow={r.eyebrow} title={r.title} subtitle={r.subtitle} />
-        <Reveal className="ba-wrap">
-          <BeforeAfter after={IMAGES.beforeAfter} labels={{ before: r.before, after: r.after }} />
+
+        {CASES.map((c) => (
+          <CaseStudy
+            key={c.key}
+            steps={c.steps}
+            labels={r.steps}
+            title={r.cases[c.key].title}
+            desc={r.cases[c.key].desc}
+            onOpen={(index) => setViewer({ images: c.steps, captions: r.steps, index })}
+          />
+        ))}
+        <Reveal>
+          <p className="consent">
+            <ShieldCheck size={15} /> {r.consent}
+          </p>
         </Reveal>
 
-        <Reveal>
-          <h3 className="gallery-title">{r.galleryTitle}</h3>
-        </Reveal>
-        <Gallery images={IMAGES.gallery} />
+        <div id="gallery" className="gallery-block">
+          <Reveal className="gallery-head">
+            <h3 className="gallery-title">{r.galleryTitle}</h3>
+            <p>{r.gallerySub}</p>
+          </Reveal>
+          <Gallery images={IMAGES.gallery} onOpen={(index) => setViewer({ images: IMAGES.gallery, index })} />
+        </div>
       </div>
+
+      <Lightbox viewer={viewer} setViewer={setViewer} />
     </section>
   );
 }
 
-/** Masonry gallery (handles any count / mixed orientations) with a lightbox. */
-function Gallery({ images }) {
-  const [open, setOpen] = useState(null);
-  const count = images.length;
-  const go = (d) => setOpen((i) => (i + d + count) % count);
+/** Before → During → After journey for one patient case. */
+function CaseStudy({ steps, labels, title, desc, onOpen }) {
+  return (
+    <Reveal className="case">
+      <div className="case-head">
+        <h3>{title}</h3>
+        <p>{desc}</p>
+      </div>
+      <div className="case-steps">
+        {steps.map((src, i) => (
+          <div key={src} className="case-step-wrap">
+            <motion.button
+              className={`case-step ${i === steps.length - 1 ? 'final' : ''}`}
+              onClick={() => onOpen(i)}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: i * 0.15 }}
+              aria-label={`${labels[i]} — ${title}`}
+            >
+              <Img src={src} alt={`${title}: ${labels[i]}`} />
+              <span className="case-label">
+                <b>{i + 1}</b> {labels[i]}
+              </span>
+            </motion.button>
+            {i < steps.length - 1 && (
+              <span className="case-arrow" aria-hidden="true">
+                <ChevronRight size={18} />
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+    </Reveal>
+  );
+}
+
+/**
+ * Clinic gallery. Exactly 3 photos get a bento layout (first photo = tall,
+ * so make it a portrait); any other count uses a masonry layout.
+ */
+function Gallery({ images, onOpen }) {
+  const layout = images.length === 3 ? 'bento' : 'masonry';
+  return (
+    <div className={`gallery ${layout}`}>
+      {images.map((src, i) => (
+        <motion.button
+          key={src}
+          className="gallery-item"
+          onClick={() => onOpen(i)}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6, delay: (i % 3) * 0.1 }}
+          aria-label={`Open photo ${i + 1}`}
+        >
+          <Img src={src} alt={`Dent-O-Shine clinic photo ${i + 1}`} />
+          <span className="gallery-zoom">
+            <Expand size={20} />
+          </span>
+        </motion.button>
+      ))}
+    </div>
+  );
+}
+
+function Lightbox({ viewer, setViewer }) {
+  const close = () => setViewer(null);
+  const go = (d) =>
+    setViewer((v) => ({ ...v, index: (v.index + d + v.images.length) % v.images.length }));
 
   useEffect(() => {
-    if (open === null) return;
+    if (!viewer) return;
     const onKey = (e) => {
-      if (e.key === 'Escape') setOpen(null);
+      if (e.key === 'Escape') close();
       if (e.key === 'ArrowRight') go(1);
       if (e.key === 'ArrowLeft') go(-1);
     };
@@ -77,70 +130,43 @@ function Gallery({ images }) {
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
-  }, [open]);
+  }, [viewer !== null]);
 
   return (
-    <>
-      <div className="gallery">
-        {images.map((src, i) => (
-          <motion.button
-            key={src}
-            className="gallery-item"
-            onClick={() => setOpen(i)}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.6, delay: (i % 3) * 0.08 }}
-            aria-label={`Open photo ${i + 1}`}
-          >
-            <Img src={src} alt={`Dent-O-Shine clinic photo ${i + 1}`} />
-            <span className="gallery-zoom">
-              <Expand size={20} />
-            </span>
-          </motion.button>
-        ))}
-      </div>
-
-      <AnimatePresence>
-        {open !== null && (
-          <motion.div
-            className="lightbox"
-            onClick={() => setOpen(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={open}
-                src={images[open]}
-                alt={`Dent-O-Shine clinic photo ${open + 1}`}
-                onClick={(e) => e.stopPropagation()}
-                initial={{ opacity: 0, scale: 0.94 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.25 }}
-              />
-            </AnimatePresence>
-            <button className="lb-btn lb-close" onClick={() => setOpen(null)} aria-label="Close">
-              <X />
-            </button>
-            {count > 1 && (
-              <>
-                <button className="lb-btn lb-prev" onClick={(e) => (e.stopPropagation(), go(-1))} aria-label="Previous photo">
-                  <ChevronLeft />
-                </button>
-                <button className="lb-btn lb-next" onClick={(e) => (e.stopPropagation(), go(1))} aria-label="Next photo">
-                  <ChevronRight />
-                </button>
-              </>
-            )}
-            <span className="lb-count">
-              {open + 1} / {count}
-            </span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <AnimatePresence>
+      {viewer && (
+        <motion.div className="lightbox" onClick={close} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <AnimatePresence mode="wait">
+            <motion.figure
+              key={viewer.index}
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.25 }}
+            >
+              <img src={viewer.images[viewer.index]} alt="" />
+              {viewer.captions && <figcaption>{viewer.captions[viewer.index]}</figcaption>}
+            </motion.figure>
+          </AnimatePresence>
+          <button className="lb-btn lb-close" onClick={close} aria-label="Close">
+            <X />
+          </button>
+          {viewer.images.length > 1 && (
+            <>
+              <button className="lb-btn lb-prev" onClick={(e) => (e.stopPropagation(), go(-1))} aria-label="Previous photo">
+                <ChevronLeft />
+              </button>
+              <button className="lb-btn lb-next" onClick={(e) => (e.stopPropagation(), go(1))} aria-label="Next photo">
+                <ChevronRight />
+              </button>
+            </>
+          )}
+          <span className="lb-count">
+            {viewer.index + 1} / {viewer.images.length}
+          </span>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

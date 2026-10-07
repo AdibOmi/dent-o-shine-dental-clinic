@@ -17,12 +17,12 @@ Deploy `dist/` to any static host (Netlify, Vercel, GitHub Pages, cPanel).
 Everything editable is in [`src/data/content.js`](src/data/content.js):
 
 - **Text** — English (`en`) and Bangla (`bn`) translations side by side.
-- **Photos** — the `IMAGES` object. Put your own photos in `public/images/` and
-  replace URLs with paths like `'/images/dr-ayesha.jpg'`. Items marked `TODO`
-  are placeholders (doctor photo, before/after, gallery).
-- **Before/after** — currently one photo with a stain filter. For a real case, pass
-  both images in `src/components/Results.jsx`:
-  `<BeforeAfter before="/images/case1-before.jpg" after="/images/case1-after.jpg" ... />`
+- **Photos** (originals kept untouched in `photos-original/`; web-optimised copies in `src/assets/`):
+  - `src/assets/clinic/` — "From our clinic" gallery. Any image dropped here appears
+    automatically, ordered by filename. With exactly 3 photos the first should be a portrait.
+  - `src/assets/doctor/` — doctor photo + round avatar used on the hero badge.
+  - `src/assets/cases/` — patient cases (Before → During → After), listed in `CASES`.
+    Keep clinical photos un-retouched; only crop them to the same frame.
 - **Reviews** — placeholder text under `reviews.items`; replace with real patient reviews.
 - **Stats** — numbers under `stats`; adjust to real figures.
 - **Contact / hours** — the `CONTACT` object (also drives the live "Open now" badge, Dhaka time).

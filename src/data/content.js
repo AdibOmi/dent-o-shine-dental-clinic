@@ -5,6 +5,12 @@
 //  Clinic gallery photos: just drop them into src/assets/clinic/.
 // ─────────────────────────────────────────────────────────────
 
+import doctorImg from '../assets/doctor/doctor.jpg';
+import doctorAvatarImg from '../assets/doctor/doctor-avatar.jpg';
+import braces1 from '../assets/cases/braces-1-before.jpg';
+import braces2 from '../assets/cases/braces-2-during.jpg';
+import braces3 from '../assets/cases/braces-3-after.jpg';
+
 const u = (id, w = 900, extra = '') =>
   `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80${extra}`;
 
@@ -27,14 +33,11 @@ export const IMAGES = {
   // (and as a small avatar on the hero badge) so her photo isn't repeated large.
   // TODO: a photo of the real Dent-O-Shine chamber works great here.
   hero: u('1629909613638-0e4a1fad8f81', 900, '&h=1100'),
-  // TODO: replace with Dr. Ayesha Akter's photo
-  doctor: u('1559839734-2b71ea197ec2', 900, '&h=1000'),
-  doctorAvatar: u('1559839734-2b71ea197ec2', 160, '&h=160&crop=faces'),
-  clinic: u('1629909613654-28e377c37b09', 1200),
-  clinic2: u('1629909615184-74f495363b67', 1200),
-  // TODO: replace with real before/after patient photos.
-  // Until then the "before" is the same photo with a stain filter applied.
-  beforeAfter: u('1494790108377-be9c29b29330', 1100, '&h=800&crop=faces'),
+  doctor: doctorImg,
+  doctorAvatar: doctorAvatarImg,
+  // "Why us" visuals: generic dental tech (not rooms, so they don't pass as our clinic)
+  why: u('1600170311833-c2cf5280ce49', 1200),
+  why2: u('1606811841689-23dfddce3e95', 900),
   services: {
     braces: u('1609840114035-3c981b782dfe', 700),
     rootCanal: u('1588776814546-1ffcf47267a5', 700),
@@ -70,6 +73,10 @@ IMAGES.gallery = clinicPhotos.length
       u('1600170311833-c2cf5280ce49', 1200),
       u('1606811841689-23dfddce3e95', 1200),
     ];
+
+// Real patient cases shown in "Results". Add more by adding entries here
+// (and a matching title/desc under results.cases in both languages).
+export const CASES = [{ key: 'braces', steps: [braces1, braces2, braces3] }];
 
 const SERVICE_KEYS = ['braces', 'rootCanal', 'implants', 'whitening', 'scaling', 'surgery', 'crowns', 'pediatric'];
 
@@ -136,12 +143,19 @@ const en = {
     ],
   },
   results: {
-    eyebrow: 'Smile transformations',
-    title: 'See the difference',
-    subtitle: 'Drag the slider to compare before and after treatment.',
-    before: 'Before',
-    after: 'After',
+    eyebrow: 'Real results',
+    title: 'Smile transformations',
+    subtitle: 'Real patients, treated at Dent-O-Shine.',
+    steps: ['Before', 'During treatment', 'After'],
+    cases: {
+      braces: {
+        title: 'Orthodontic braces',
+        desc: 'Crowded, overlapping teeth guided into an even, confident smile.',
+      },
+    },
+    consent: 'Photos shared with patient consent.',
     galleryTitle: 'From our clinic',
+    gallerySub: 'Take a look inside our chamber in Sector 11, Uttara.',
   },
   reviews: {
     eyebrow: 'Patient stories',
@@ -237,12 +251,19 @@ const bn = {
     ],
   },
   results: {
-    eyebrow: 'হাসির রূপান্তর',
-    title: 'পার্থক্যটা দেখুন',
-    subtitle: 'চিকিৎসার আগে ও পরে তুলনা করতে স্লাইডারটি টানুন।',
-    before: 'আগে',
-    after: 'পরে',
+    eyebrow: 'আসল ফলাফল',
+    title: 'হাসির রূপান্তর',
+    subtitle: 'ডেন্ট-ও-শাইনে চিকিৎসা নেওয়া আসল রোগীদের ছবি।',
+    steps: ['আগে', 'চিকিৎসা চলাকালীন', 'পরে'],
+    cases: {
+      braces: {
+        title: 'অর্থোডন্টিক ব্রেসেস',
+        desc: 'আঁকাবাঁকা ও এলোমেলো দাঁত সোজা হয়ে সুন্দর, আত্মবিশ্বাসী হাসি।',
+      },
+    },
+    consent: 'রোগীর সম্মতিতে প্রকাশিত ছবি।',
     galleryTitle: 'আমাদের চেম্বার থেকে',
+    gallerySub: 'উত্তরা সেক্টর ১১-এ আমাদের চেম্বারের এক ঝলক।',
   },
   reviews: {
     eyebrow: 'রোগীদের কথা',
