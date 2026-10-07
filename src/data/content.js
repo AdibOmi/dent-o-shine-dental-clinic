@@ -87,21 +87,15 @@ const en = {
   status: { open: 'Open now', closed: 'Closed now', opensAt: 'Opens at 5:00 PM', closesAt: 'Closes at 9:30 PM' },
   hero: {
     tagline: 'Styling Your Smile...',
-    titleA: 'Healthy teeth,',
-    titleB: 'confident smiles.',
-    subtitle:
-      'An advanced multi speciality dental care in Uttara — gentle treatment, modern equipment and a specialist in oral surgery who truly listens.',
+    // Headline = the clinic's own slogan; `highlight` gets the green gradient
+    title: { pre: 'Styling your ', highlight: 'smile', post: '' },
+    subtitle: 'Advanced multi-speciality dental care in Uttara, Dhaka.',
+    chips: ['Braces', 'Root Canal', 'Implants', 'Whitening', 'Scaling', 'Oral Surgery'],
     badgeReg: 'BMDC Reg. No. 6588',
     badgeCare: 'Gentle & painless care',
     badgeSpecialist: 'Oral Surgery Specialist',
     hours: 'Consulting Hour: 5:00 PM – 9:30 PM',
   },
-  stats: [
-    { value: 8, suffix: '+', label: 'Specialised treatments' },
-    { value: 100, suffix: '%', label: 'Sterilised instruments' },
-    { value: 1000, suffix: '+', label: 'Happy smiles' },
-    { value: 5, suffix: '★', label: 'Patient-first care' },
-  ],
   about: {
     eyebrow: 'Meet your dentist',
     name: 'Dr. Ayesha Akter',
@@ -195,21 +189,14 @@ const bn = {
   status: { open: 'এখন খোলা', closed: 'এখন বন্ধ', opensAt: 'বিকাল ৫:০০ টায় খুলবে', closesAt: 'রাত ৯:৩০ টায় বন্ধ হবে' },
   hero: {
     tagline: 'আপনার হাসিকে সাজাই...',
-    titleA: 'সুস্থ দাঁত,',
-    titleB: 'আত্মবিশ্বাসী হাসি।',
-    subtitle:
-      'উত্তরায় একটি অত্যাধুনিক মাল্টি স্পেশালিটি ডেন্টাল কেয়ার — যত্নশীল চিকিৎসা, আধুনিক যন্ত্রপাতি এবং একজন ওরাল সার্জারি বিশেষজ্ঞ যিনি মন দিয়ে আপনার কথা শোনেন।',
+    title: { pre: 'আপনার ', highlight: 'হাসিকে', post: ' সাজাই' },
+    subtitle: 'উত্তরা, ঢাকায় অত্যাধুনিক মাল্টি-স্পেশালিটি ডেন্টাল কেয়ার।',
+    chips: ['ব্রেসেস', 'রুট ক্যানাল', 'ইমপ্লান্ট', 'দাঁত সাদা করা', 'স্কেলিং', 'ওরাল সার্জারি'],
     badgeReg: 'বিএমডিসি রেজি. নং ৬৫৮৮',
     badgeCare: 'যত্নশীল ও ব্যথামুক্ত চিকিৎসা',
     badgeSpecialist: 'ওরাল সার্জারি বিশেষজ্ঞ',
     hours: 'চেম্বার সময়: বিকাল ৫:০০ – রাত ৯:৩০',
   },
-  stats: [
-    { value: 8, suffix: '+', label: 'বিশেষায়িত চিকিৎসা' },
-    { value: 100, suffix: '%', label: 'জীবাণুমুক্ত যন্ত্রপাতি' },
-    { value: 1000, suffix: '+', label: 'সন্তুষ্ট রোগী' },
-    { value: 5, suffix: '★', label: 'রোগীবান্ধব সেবা' },
-  ],
   about: {
     eyebrow: 'আপনার ডাক্তারকে জানুন',
     name: 'ডাঃ আয়েশা আক্তার',

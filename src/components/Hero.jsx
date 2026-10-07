@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Clock, MessageCircle, Phone, ShieldCheck, Sparkles } from 'lucide-react';
 import { useLang } from '../i18n';
@@ -11,11 +12,37 @@ const fadeUp = (delay) => ({
   transition: { duration: 0.9, delay, ease },
 });
 
-export default function Hero() {
+function useIsDesktop() {
+  const query = '(min-width: 901px)';
+  const [match, setMatch] = useState(() => window.matchMedia(query).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const onChange = () => setMatch(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  return match;
+}
+
+function StatusChip({ className = '' }) {
   const { t } = useLang();
   const open = useOpenStatus();
+  return (
+    <div className={`status-chip ${open ? 'open' : 'closed'} ${className}`}>
+      <span className="pulse" />
+      {open ? t.status.open : t.status.closed}
+      <span className="muted">· {open ? t.status.closesAt : t.status.opensAt}</span>
+    </div>
+  );
+}
+
+export default function Hero() {
+  const { t } = useLang();
+  const h = t.hero;
+  const isDesktop = useIsDesktop();
   const { scrollY } = useScroll();
-  const imgY = useTransform(scrollY, [0, 600], [0, 80]);
+  // parallax only on desktop — on phones the photo is a card above the text
+  const imgY = useTransform(scrollY, [0, 600], [0, isDesktop ? 80 : 0]);
   const blobY = useTransform(scrollY, [0, 600], [0, -60]);
 
   return (
@@ -26,27 +53,21 @@ export default function Hero() {
 
       <div className="container hero-grid">
         <div className="hero-copy">
-          <motion.div {...fadeUp(0.1)} className={`status-chip ${open ? 'open' : 'closed'}`}>
-            <span className="pulse" />
-            {open ? t.status.open : t.status.closed}
-            <span className="muted">· {open ? t.status.closesAt : t.status.opensAt}</span>
+          <motion.div {...fadeUp(0.1)}>
+            <StatusChip className="status-desktop" />
           </motion.div>
 
-          <motion.p {...fadeUp(0.2)} className="tagline">
-            {t.hero.tagline}
-          </motion.p>
-
-          <motion.h1 {...fadeUp(0.3)}>
-            {t.hero.titleA}
-            <br />
-            <span className="grad-text">{t.hero.titleB}</span>
+          <motion.h1 {...fadeUp(0.2)}>
+            {h.title.pre}
+            <span className="grad-text">{h.title.highlight}</span>
+            {h.title.post}
           </motion.h1>
 
-          <motion.p {...fadeUp(0.45)} className="hero-sub">
-            {t.hero.subtitle}
+          <motion.p {...fadeUp(0.3)} className="hero-sub">
+            {h.subtitle}
           </motion.p>
 
-          <motion.div {...fadeUp(0.6)} className="hero-ctas">
+          <motion.div {...fadeUp(0.4)} className="hero-ctas">
             <a href={`tel:${CONTACT.phoneTel}`} className="btn btn-primary btn-lg">
               <Phone size={20} /> {t.callNow}
             </a>
@@ -55,11 +76,19 @@ export default function Hero() {
             </a>
           </motion.div>
 
-          <motion.div {...fadeUp(0.75)} className="hero-meta">
+          <motion.div {...fadeUp(0.5)} className="hero-chips">
+            {h.chips.map((chip) => (
+              <a key={chip} href="#services" className="chip">
+                {chip}
+              </a>
+            ))}
+          </motion.div>
+
+          <motion.div {...fadeUp(0.6)} className="hero-meta">
             <span>
-              <Clock size={16} /> {t.hero.hours}
+              <Clock size={16} /> {h.hours}
             </span>
-            <span>
+            <span className="meta-phone">
               <Phone size={16} /> {CONTACT.phoneDisplay}
             </span>
           </motion.div>
@@ -67,19 +96,20 @@ export default function Hero() {
 
         <motion.div
           className="hero-visual"
-          initial={{ opacity: 0, scale: 0.92 }}
+          initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.1, delay: 0.2, ease }}
+          transition={{ duration: 1.1, delay: 0.1, ease }}
         >
           <div className="hero-ring" />
           <motion.div className="hero-photo" style={{ y: imgY }}>
             <Img src={IMAGES.hero} alt="Dent-O-Shine dental chamber" />
           </motion.div>
+          <StatusChip className="status-mobile" />
 
           <motion.a
             href="#about"
             className="float-card fc-1"
-            animate={{ y: [0, -12, 0] }}
+            animate={{ y: [0, -10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
           >
             <span className="fc-avatar">
@@ -87,7 +117,7 @@ export default function Hero() {
             </span>
             <div>
               <strong>{t.about.name}</strong>
-              <small>{t.hero.badgeSpecialist}</small>
+              <small>{h.badgeSpecialist}</small>
             </div>
           </motion.a>
 
@@ -96,7 +126,7 @@ export default function Hero() {
               <Sparkles size={20} />
             </span>
             <div>
-              <strong>{t.hero.badgeCare}</strong>
+              <strong>{h.badgeCare}</strong>
             </div>
           </motion.div>
 
@@ -105,7 +135,7 @@ export default function Hero() {
               <ShieldCheck size={20} />
             </span>
             <div>
-              <strong>{t.hero.badgeReg}</strong>
+              <strong>{h.badgeReg}</strong>
             </div>
           </motion.div>
         </motion.div>

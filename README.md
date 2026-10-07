@@ -19,7 +19,8 @@ Everything editable is in [`src/data/content.js`](src/data/content.js):
 - **Text** — English (`en`) and Bangla (`bn`) translations side by side.
 - **Photos** (originals kept untouched in `photos-original/`; web-optimised copies in `src/assets/`):
   - `src/assets/clinic/` — "From our clinic" gallery. Any image dropped here appears
-    automatically, ordered by filename. With exactly 3 photos the first should be a portrait.
+    automatically, ordered by filename. With 3 or 4 photos a bento layout is used: the first
+    should be a portrait, and (with 4) the last a wide landscape. Other counts use masonry.
   - `src/assets/doctor/` — doctor photo + round avatar used on the hero badge.
   - `src/assets/cases/` — patient cases (Before → During → After), listed in `CASES`.
     Keep clinical photos un-retouched; only crop them to the same frame.

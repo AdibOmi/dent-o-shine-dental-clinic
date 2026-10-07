@@ -486,31 +486,60 @@ h2 {
   }
 }
 
-.tagline {
-  margin-top: 26px;
-  font-size: 1.15rem;
-  font-style: italic;
-  font-weight: 700;
-  color: var(--orange);
-}
-
 .hero h1 {
-  font-size: clamp(2.6rem, 5.6vw, 4.4rem);
+  font-size: clamp(2.6rem, 5vw, 4rem);
   font-weight: 800;
-  margin: 10px 0 22px;
+  margin: 26px 0 16px;
 }
 
 .hero-sub {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: var(--ink-soft);
-  max-width: 540px;
+  max-width: 560px;
+}
+
+/* let grid columns shrink below their content's width (the chip row is wide) */
+.hero-copy,
+.hero-visual {
+  min-width: 0;
 }
 
 .hero-ctas {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  margin-top: 34px;
+  margin-top: 32px;
+}
+
+/* quick links to services */
+.hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 26px;
+  max-width: 600px;
+}
+
+.chip {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--green-700);
+  white-space: nowrap;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+}
+
+.chip:hover {
+  background: var(--green-50);
+  border-color: var(--green-200);
+  transform: translateY(-2px);
+}
+
+.status-mobile {
+  display: none;
 }
 
 .hero-meta {
@@ -662,60 +691,6 @@ a.float-card:hover {
   width: 100%;
   height: 90px;
   fill: var(--white);
-}
-
-/* ───────────────────────── Stats ───────────────────────── */
-.stats {
-  position: relative;
-  margin-top: -40px;
-  z-index: 3;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--line);
-  overflow: hidden;
-}
-
-.stat {
-  padding: 34px 20px;
-  text-align: center;
-  position: relative;
-}
-
-.stat + .stat::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 25%;
-  height: 50%;
-  width: 1px;
-  background: var(--line);
-}
-
-.stat span {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--green-600);
-  line-height: 1;
-}
-
-.stat em {
-  font-style: normal;
-  color: var(--orange);
-  font-size: 1.6rem;
-  margin-left: 2px;
-}
-
-.stat p {
-  margin-top: 8px;
-  color: var(--ink-soft);
-  font-weight: 600;
-  font-size: 0.95rem;
 }
 
 /* ───────────────────────── About ───────────────────────── */
@@ -1212,7 +1187,8 @@ a.float-card:hover {
   break-inside: avoid;
 }
 
-/* Bento (exactly 3 photos): tall first photo + two stacked */
+/* Bento (3 or 4 photos): tall first photo on the left.
+   3 → two stacked on the right; 4 → two side by side + a wide one below */
 .gallery.bento {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
@@ -1229,6 +1205,18 @@ a.float-card:hover {
   height: 100%;
   object-fit: cover;
   object-position: center 40%;
+}
+
+.gallery.bento-4 {
+  grid-template-columns: 1.1fr 1fr 1fr;
+}
+
+.gallery.bento-4 .gallery-item:nth-child(4) {
+  grid-column: 2 / 4;
+}
+
+.gallery.bento-4 .gallery-item:nth-child(4) img {
+  object-position: center 25%; /* keep faces in frame */
 }
 
 /* Lightbox */
@@ -1365,6 +1353,22 @@ a.float-card:hover {
   .gallery.bento .gallery-item:first-child img {
     aspect-ratio: 4 / 4.4;
     object-fit: cover;
+  }
+  /* 4 photos stay a compact grid on phones (keeps the page short) */
+  .gallery.bento-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 150px 150px 175px;
+    gap: 10px;
+  }
+  .gallery.bento-4 .gallery-item img,
+  .gallery.bento-4 .gallery-item:first-child img {
+    height: 100%;
+    aspect-ratio: auto;
+    object-fit: cover;
+  }
+  .gallery.bento-4 .gallery-item:nth-child(4) {
+    grid-column: 1 / -1;
   }
   .gallery-item {
     border-radius: 16px;
@@ -1713,11 +1717,13 @@ a.float-card:hover {
   .section {
     padding: 80px 0;
   }
+  .section-head {
+    margin-bottom: 40px;
+  }
   .hero {
     min-height: auto;
-    padding: calc(var(--nav-h) + 24px) 0 110px;
-    /* glow sits behind the photo, which is lower on phones */
-    background: radial-gradient(circle at 50% 78%, rgba(47, 196, 149, 0.18), transparent 46%),
+    padding: calc(var(--nav-h) + 10px) 0 90px;
+    background: radial-gradient(circle at 50% 28%, rgba(47, 196, 149, 0.12), transparent 52%),
       radial-gradient(circle at 100% 100%, #fff3ec, transparent 30%), var(--white);
   }
   .blob-1,
@@ -1731,18 +1737,64 @@ a.float-card:hover {
     grid-template-columns: 1fr;
   }
   .hero-grid {
-    gap: 56px;
+    gap: 44px;
     text-align: center;
+  }
+  /* phones: wide photo card first, text below */
+  .hero-visual {
+    order: -1;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 16 / 11;
+  }
+  .hero-ring {
+    inset: 14px -10px -12px 14px;
+    border-radius: 30px;
+    background: var(--green-100);
+    opacity: 1;
+    animation: none;
+  }
+  .hero-photo {
+    border-radius: 28px;
+    border-width: 4px;
+  }
+  .fc-2,
+  .fc-3 {
+    display: none;
+  }
+  .fc-1 {
+    top: auto;
+    bottom: -26px;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: max-content;
+  }
+  .status-desktop {
+    display: none;
+  }
+  .status-mobile {
+    display: inline-flex;
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    font-size: 0.8rem;
+    padding: 6px 12px 6px 10px;
+  }
+  .hero h1 {
+    margin-top: 6px;
   }
   .hero-sub {
     margin-inline: auto;
   }
   .hero-ctas,
-  .hero-meta {
+  .hero-meta,
+  .hero-chips {
     justify-content: center;
   }
-  .hero-visual {
-    width: min(380px, 82%);
+  .hero-chips {
+    max-width: none;
   }
   .about-grid {
     gap: 60px;
@@ -1752,17 +1804,9 @@ a.float-card:hover {
     margin-inline: auto;
     width: 100%;
   }
+  /* decorative stock photos — skip on phones to keep the page short */
   .why-visual {
-    height: 420px;
-  }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .stat:nth-child(3)::before {
     display: none;
-  }
-  .stat:nth-child(n + 3) {
-    border-top: 1px solid var(--line);
   }
   .footer-grid {
     grid-template-columns: 1fr;
@@ -1777,38 +1821,130 @@ a.float-card:hover {
   .nav-call {
     display: none;
   }
-  .hero-meta {
-    gap: 8px 18px;
-    margin-top: 22px;
-    font-size: 0.9rem;
-  }
-  .hero-ctas .btn-lg {
-    padding: 15px 22px;
-  }
   .brand-text small {
     display: none;
   }
-  .services-grid,
-  .why-list {
-    grid-template-columns: 1fr;
+
+  /* Hero */
+  .hero h1 {
+    font-size: 2.35rem;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+  }
+  .hero-ctas {
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .hero-ctas .btn-lg {
+    flex: 1;
+    padding: 14px 10px;
+    font-size: 1rem;
+  }
+  /* chips become one swipeable row */
+  .hero-chips {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin: 20px -16px 0;
+    padding: 2px 16px;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+  }
+  .hero-chips::-webkit-scrollbar {
+    display: none;
+  }
+  .hero-meta {
+    margin-top: 18px;
+    font-size: 0.88rem;
+  }
+  .hero-meta .meta-phone {
+    display: none;
   }
   .float-card {
-    padding: 8px 12px 8px 8px;
+    padding: 8px 14px 8px 8px;
   }
   .float-card strong {
-    font-size: 0.78rem;
+    font-size: 0.82rem;
   }
   .fc-icon,
   .fc-avatar {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
   }
-  .fc-1 {
-    left: -10%;
+
+  /* Services: compact rows instead of full-screen image cards */
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
-  .fc-2 {
-    right: -10%;
+  .service-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    border-radius: 18px;
   }
+  .service-img {
+    flex: 0 0 84px;
+    height: 84px;
+    border-radius: 14px;
+  }
+  .service-body {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 10px;
+  }
+  .service-icon {
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    border: 0;
+    border-radius: 9px;
+    box-shadow: none;
+    box-sizing: border-box;
+  }
+  .service-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  .service-body h3 {
+    font-size: 1rem;
+    margin: 0;
+  }
+  .service-body p {
+    grid-column: 1 / -1;
+    margin-top: 6px;
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  /* Why us: 2-up compact tiles */
+  .why-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .why-item {
+    padding: 16px 14px;
+  }
+  .why-icon {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 10px;
+  }
+  .why-item h3 {
+    font-size: 0.96rem;
+  }
+  .why-item p {
+    font-size: 0.82rem;
+  }
+
   .about-card {
     right: 10px;
   }
@@ -1823,9 +1959,6 @@ a.float-card:hover {
   }
   .contact-card {
     padding: 26px 20px;
-  }
-  .stat span {
-    font-size: 2rem;
   }
 }
 

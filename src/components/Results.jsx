@@ -84,11 +84,13 @@ function CaseStudy({ steps, labels, title, desc, onOpen }) {
 }
 
 /**
- * Clinic gallery. Exactly 3 photos get a bento layout (first photo = tall,
- * so make it a portrait); any other count uses a masonry layout.
+ * Clinic gallery. 3 or 4 photos get a bento layout (first photo = tall, so make
+ * it a portrait; with 4, the last one spans wide, so make it a landscape).
+ * Any other count uses a masonry layout.
  */
 function Gallery({ images, onOpen }) {
-  const layout = images.length === 3 ? 'bento' : 'masonry';
+  const n = images.length;
+  const layout = n === 3 || n === 4 ? `bento bento-${n}` : 'masonry';
   return (
     <div className={`gallery ${layout}`}>
       {images.map((src, i) => (
