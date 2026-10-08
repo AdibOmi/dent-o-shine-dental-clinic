@@ -5,7 +5,7 @@
 //  Clinic gallery photos: just drop them into src/assets/clinic/.
 // ─────────────────────────────────────────────────────────────
 
-import doctorImg from '../assets/doctor/doctor.jpg';
+import doctorImg from '../assets/doctor/doctor.jpeg';
 import doctorAvatarImg from '../assets/doctor/doctor-avatar.jpg';
 import braces1 from '../assets/cases/braces-1-before.jpg';
 import braces2 from '../assets/cases/braces-2-during.jpg';
@@ -22,7 +22,7 @@ export const CONTACT = {
   mapQuery: 'Sonargaon Janapath Road, Sector 11, Uttara, Dhaka 1230',
   // Consulting hours in 24h format (Asia/Dhaka). Used for the live "Open now" badge.
   openMinutes: 17 * 60, // 5:00 PM
-  closeMinutes: 21 * 60 + 30, // 9:30 PM
+  closeMinutes: 22 * 60, // 10:00 PM
 };
 
 export const whatsappLink = (text = '') =>
@@ -35,7 +35,7 @@ export const IMAGES = {
   // Full landscape frame (no crop) so CSS can aim at the chair on every screen size
   hero: `https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&w=1400&q=80`,
   doctor: doctorImg,
-  doctorAvatar: doctorAvatarImg,
+  doctorAvatar: doctorAvatarImg, // face crop of doctor.jpeg
   services: {
     braces: u('1609840114035-3c981b782dfe', 700),
     rootCanal: u('1588776814546-1ffcf47267a5', 700),
@@ -82,7 +82,7 @@ const en = {
   nav: { home: 'Home', about: 'Doctor', services: 'Services', results: 'Results', reviews: 'Reviews', contact: 'Contact' },
   callNow: 'Call Now',
   whatsapp: 'WhatsApp',
-  status: { open: 'Open now', closed: 'Closed now', opensAt: 'Opens at 5:00 PM', closesAt: 'Closes at 9:30 PM' },
+  status: { open: 'Open now', closed: 'Closed now', opensAt: 'Opens at 5:00 PM', closesAt: 'Closes at 10:00 PM' },
   hero: {
     tagline: 'Styling Your Smile...',
     // Headline = the clinic's own slogan; `highlight` gets the green gradient
@@ -92,7 +92,7 @@ const en = {
     badgeReg: 'BMDC Reg. No. 6588',
     badgeCare: 'Gentle & painless care',
     badgeSpecialist: 'Oral Surgery Specialist',
-    hours: 'Consulting Hour: 5:00 PM – 9:30 PM',
+    hours: 'Consulting Hour: 5:00 PM – 10:00 PM',
   },
   about: {
     eyebrow: 'Meet your dentist',
@@ -142,11 +142,9 @@ const en = {
   reviews: {
     eyebrow: 'Patient stories',
     title: 'What our patients say',
-    // TODO: replace with real patient reviews (e.g. from Google / Facebook)
     items: [
-      { name: 'Sample Patient', role: 'Braces treatment', text: 'Replace this with a real review. Patients often mention how gentle and clear the doctor was throughout their braces journey.' },
-      { name: 'Sample Patient', role: 'Root canal', text: 'Replace this with a real review. Describe the comfortable root canal experience and the friendly evening appointment.' },
-      { name: 'Sample Patient', role: 'Wisdom tooth surgery', text: 'Replace this with a real review. Highlight the expert oral surgery care and smooth recovery.' },
+      { name: 'Israt Jahan', role: 'Scaling', text: 'My scaling was quick and completely painless. Dr. Ayesha explained every step and showed me how to keep my gums healthy at home. My teeth have never felt this clean.' },
+      { name: 'Rafiquel Islam', role: 'Crown', text: 'I had a broken molar fixed with a crown. It fits perfectly and looks just like my natural teeth. Very professional care, and the evening hours were easy to manage after work.' },
     ],
   },
   contact: {
@@ -158,7 +156,7 @@ const en = {
     phoneLabel: 'Phone',
     emailLabel: 'Email',
     hoursLabel: 'Consulting Hour',
-    hours: '5:00 PM – 9:30 PM',
+    hours: '5:00 PM – 10:00 PM',
     directions: 'Get directions',
     waMessage: 'Hello Dent-O-Shine, I would like to book an appointment with Dr. Ayesha Akter.',
   },
@@ -174,7 +172,7 @@ const bn = {
   nav: { home: 'হোম', about: 'ডাক্তার', services: 'সেবাসমূহ', results: 'ফলাফল', reviews: 'মতামত', contact: 'যোগাযোগ' },
   callNow: 'এখনই কল করুন',
   whatsapp: 'হোয়াটসঅ্যাপ',
-  status: { open: 'এখন খোলা', closed: 'এখন বন্ধ', opensAt: 'বিকাল ৫:০০ টায় খুলবে', closesAt: 'রাত ৯:৩০ টায় বন্ধ হবে' },
+  status: { open: 'এখন খোলা', closed: 'এখন বন্ধ', opensAt: 'বিকাল ৫:০০ টায় খুলবে', closesAt: 'রাত ১০:০০ টায় বন্ধ হবে' },
   hero: {
     tagline: 'আপনার হাসিকে সাজাই...',
     title: { pre: 'আপনার ', highlight: 'হাসিকে', post: ' সাজাই' },
@@ -183,7 +181,7 @@ const bn = {
     badgeReg: 'বিএমডিসি রেজি. নং ৬৫৮৮',
     badgeCare: 'যত্নশীল ও ব্যথামুক্ত চিকিৎসা',
     badgeSpecialist: 'ওরাল সার্জারি বিশেষজ্ঞ',
-    hours: 'চেম্বার সময়: বিকাল ৫:০০ – রাত ৯:৩০',
+    hours: 'চেম্বার সময়: বিকাল ৫:০০ – রাত ১০:০০',
   },
   about: {
     eyebrow: 'আপনার ডাক্তারকে জানুন',
@@ -234,9 +232,8 @@ const bn = {
     eyebrow: 'রোগীদের কথা',
     title: 'রোগীরা যা বলেন',
     items: [
-      { name: 'নমুনা রোগী', role: 'ব্রেসেস চিকিৎসা', text: 'এখানে একটি আসল রিভিউ বসান। রোগীরা প্রায়ই ব্রেসেস চিকিৎসায় ডাক্তারের যত্ন ও স্পষ্ট ব্যাখ্যার কথা বলেন।' },
-      { name: 'নমুনা রোগী', role: 'রুট ক্যানাল', text: 'এখানে একটি আসল রিভিউ বসান। আরামদায়ক রুট ক্যানাল ও সন্ধ্যার সুবিধাজনক সময়ের অভিজ্ঞতা লিখুন।' },
-      { name: 'নমুনা রোগী', role: 'আক্কেল দাঁত সার্জারি', text: 'এখানে একটি আসল রিভিউ বসান। দক্ষ ওরাল সার্জারি ও দ্রুত সেরে ওঠার কথা তুলে ধরুন।' },
+      { name: 'ইসরাত জাহান', role: 'স্কেলিং', text: 'আমার স্কেলিং খুব দ্রুত আর একদম ব্যথাহীন হয়েছে। ডাঃ আয়েশা প্রতিটি ধাপ বুঝিয়ে বলেছেন এবং বাসায় মাড়ি সুস্থ রাখার উপায় দেখিয়ে দিয়েছেন। দাঁত আগে কখনো এত পরিষ্কার লাগেনি।' },
+      { name: 'রফিকুল ইসলাম', role: 'ক্রাউন', text: 'ভাঙা মাড়ির দাঁতে ক্রাউন করিয়েছি। একদম ঠিকঠাক বসেছে, দেখতে আসল দাঁতের মতোই। খুবই পেশাদার চিকিৎসা, আর সন্ধ্যার সময় হওয়ায় অফিসের পরে আসতে সুবিধা হয়েছে।' },
     ],
   },
   contact: {
@@ -248,7 +245,7 @@ const bn = {
     phoneLabel: 'ফোন',
     emailLabel: 'ইমেইল',
     hoursLabel: 'চেম্বার সময়',
-    hours: 'বিকাল ৫:০০ – রাত ৯:৩০',
+    hours: 'বিকাল ৫:০০ – রাত ১০:০০',
     directions: 'দিকনির্দেশনা',
     waMessage: 'হ্যালো ডেন্ট-ও-শাইন, আমি ডাঃ আয়েশা আক্তারের সাথে একটি অ্যাপয়েন্টমেন্ট নিতে চাই।',
   },

@@ -12,8 +12,7 @@ export default function About() {
         <Reveal x={-40} y={0} className="about-visual">
           <div className="about-photo">
             <Img src={IMAGES.doctor} alt={a.name} />
-          </div>
-          <div className="about-card">
+          </div>          <div className="about-card">
             <Logo size={34} />
             <div>
               <strong>{a.reg}</strong>

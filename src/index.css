@@ -719,9 +719,9 @@ a.float-card:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 15%;
   transition: transform 0.8s;
 }
-
 .about-photo:hover img {
   transform: scale(1.05);
 }
@@ -1844,8 +1844,7 @@ a.float-card:hover {
 
   .about-card {
     right: 10px;
-  }
-  .about-deco {
+  }  .about-deco {
     inset: 20px -12px -16px 20px;
   }
   .review-card {
