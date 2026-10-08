@@ -1,9 +1,12 @@
 node_modules/
 dist/
-.netlify/
+.wrangler/
 .env
 .env.*
 *.log
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Original, uncompressed photos (kept locally, not in git)
+photos-original/

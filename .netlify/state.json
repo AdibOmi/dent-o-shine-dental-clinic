@@ -1,0 +1,21 @@
+{
+	"dbConnectionString": "postgres://localhost:10497/postgres",
+	"geolocation": {
+		"data": {
+			"city": "Dhaka",
+			"country": {
+				"code": "BD",
+				"name": "Bangladesh"
+			},
+			"subdivision": {
+				"code": "C",
+				"name": "Dhaka Division"
+			},
+			"timezone": "Asia/Dhaka",
+			"latitude": 23.7729,
+			"longitude": 90.3657,
+			"postalCode": "1207"
+		},
+		"timestamp": 1791484840296
+	}
+}

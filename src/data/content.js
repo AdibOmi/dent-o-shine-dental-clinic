@@ -23,6 +23,7 @@ export const CONTACT = {
   // Consulting hours in 24h format (Asia/Dhaka). Used for the live "Open now" badge.
   openMinutes: 17 * 60, // 5:00 PM
   closeMinutes: 22 * 60, // 10:00 PM
+  closedDay: 'Fri', // weekly holiday
 };
 
 export const whatsappLink = (text = '') =>
@@ -82,7 +83,7 @@ const en = {
   nav: { home: 'Home', about: 'Doctor', services: 'Services', results: 'Results', reviews: 'Reviews', contact: 'Contact' },
   callNow: 'Call Now',
   whatsapp: 'WhatsApp',
-  status: { open: 'Open now', closed: 'Closed now', opensAt: 'Opens at 5:00 PM', closesAt: 'Closes at 10:00 PM' },
+  status: { open: 'Open now', closed: 'Closed now', opensAt: 'Opens at 5:00 PM', closesAt: 'Closes at 10:00 PM', opensSat: 'Opens Saturday at 5:00 PM' },
   hero: {
     tagline: 'Styling Your Smile...',
     // Headline = the clinic's own slogan; `highlight` gets the green gradient
@@ -92,7 +93,7 @@ const en = {
     badgeReg: 'BMDC Reg. No. 6588',
     badgeCare: 'Gentle & painless care',
     badgeSpecialist: 'Oral Surgery Specialist',
-    hours: 'Consulting Hour: 5:00 PM – 10:00 PM',
+    hours: 'Consulting Hour: 5:00 PM – 10:00 PM (Friday closed)',
   },
   about: {
     eyebrow: 'Meet your dentist',
@@ -142,9 +143,31 @@ const en = {
   reviews: {
     eyebrow: 'Patient stories',
     title: 'What our patients say',
+    patient: 'Patient',
+    form: {
+      open: 'Write a review',
+      title: 'Share your experience',
+      name: 'Your name',
+      phone: 'Mobile number',
+      phoneHint: 'Only used to confirm you are our patient. It is never shown on the website.',
+      rating: 'Your rating',
+      text: 'Your review (optional)',
+      textPlaceholder: 'How was your treatment at Dent-O-Shine?',
+      submit: 'Submit review',
+      sending: 'Sending…',
+      cancel: 'Cancel',
+      thanks: 'Thank you! Your review will appear here after the clinic checks it.',
+      errors: {
+        name: 'Please enter your name.',
+        phone: 'Please enter a valid Bangladeshi mobile number (01XXXXXXXXX).',
+        rating: 'Please choose a star rating.',
+        duplicate: 'A review has already been submitted with this number. Thank you!',
+        server: 'Something went wrong. Please try again, or message us on WhatsApp.',
+      },
+    },
     items: [
       { name: 'Israt Jahan', role: 'Scaling', text: 'My scaling was quick and completely painless. Dr. Ayesha explained every step and showed me how to keep my gums healthy at home. My teeth have never felt this clean.' },
-      { name: 'Rafiquel Islam', role: 'Crown', text: 'I had a broken molar fixed with a crown. It fits perfectly and looks just like my natural teeth. Very professional care, and the evening hours were easy to manage after work.' },
+      { name: 'Rafiqul Islam', role: 'Crown', text: 'I had a broken molar fixed with a crown. It fits perfectly and looks just like my natural teeth. Very professional care, and the evening hours were easy to manage after work.' },
     ],
   },
   contact: {
@@ -156,7 +179,7 @@ const en = {
     phoneLabel: 'Phone',
     emailLabel: 'Email',
     hoursLabel: 'Consulting Hour',
-    hours: '5:00 PM – 10:00 PM',
+    hours: 'Sat – Thu, 5:00 PM – 10:00 PM · Friday closed',
     directions: 'Get directions',
     waMessage: 'Hello Dent-O-Shine, I would like to book an appointment with Dr. Ayesha Akter.',
   },
@@ -172,7 +195,7 @@ const bn = {
   nav: { home: 'হোম', about: 'ডাক্তার', services: 'সেবাসমূহ', results: 'ফলাফল', reviews: 'মতামত', contact: 'যোগাযোগ' },
   callNow: 'এখনই কল করুন',
   whatsapp: 'হোয়াটসঅ্যাপ',
-  status: { open: 'এখন খোলা', closed: 'এখন বন্ধ', opensAt: 'বিকাল ৫:০০ টায় খুলবে', closesAt: 'রাত ১০:০০ টায় বন্ধ হবে' },
+  status: { open: 'এখন খোলা', closed: 'এখন বন্ধ', opensAt: 'বিকাল ৫:০০ টায় খুলবে', closesAt: 'রাত ১০:০০ টায় বন্ধ হবে', opensSat: 'শনিবার বিকাল ৫:০০ টায় খুলবে' },
   hero: {
     tagline: 'আপনার হাসিকে সাজাই...',
     title: { pre: 'আপনার ', highlight: 'হাসিকে', post: ' সাজাই' },
@@ -181,7 +204,7 @@ const bn = {
     badgeReg: 'বিএমডিসি রেজি. নং ৬৫৮৮',
     badgeCare: 'যত্নশীল ও ব্যথামুক্ত চিকিৎসা',
     badgeSpecialist: 'ওরাল সার্জারি বিশেষজ্ঞ',
-    hours: 'চেম্বার সময়: বিকাল ৫:০০ – রাত ১০:০০',
+    hours: 'চেম্বার সময়: বিকাল ৫:০০ – রাত ১০:০০ (শুক্রবার বন্ধ)',
   },
   about: {
     eyebrow: 'আপনার ডাক্তারকে জানুন',
@@ -231,6 +254,28 @@ const bn = {
   reviews: {
     eyebrow: 'রোগীদের কথা',
     title: 'রোগীরা যা বলেন',
+    patient: 'রোগী',
+    form: {
+      open: 'রিভিউ লিখুন',
+      title: 'আপনার অভিজ্ঞতা জানান',
+      name: 'আপনার নাম',
+      phone: 'মোবাইল নম্বর',
+      phoneHint: 'শুধু আপনি আমাদের রোগী কিনা নিশ্চিত করতে। ওয়েবসাইটে কখনো দেখানো হবে না।',
+      rating: 'আপনার রেটিং',
+      text: 'আপনার রিভিউ (ঐচ্ছিক)',
+      textPlaceholder: 'ডেন্ট-ও-শাইনে আপনার চিকিৎসা কেমন ছিল?',
+      submit: 'রিভিউ জমা দিন',
+      sending: 'পাঠানো হচ্ছে…',
+      cancel: 'বাতিল',
+      thanks: 'ধন্যবাদ! ক্লিনিক যাচাই করার পর আপনার রিভিউ এখানে দেখা যাবে।',
+      errors: {
+        name: 'অনুগ্রহ করে আপনার নাম লিখুন।',
+        phone: 'সঠিক মোবাইল নম্বর দিন (০১XXXXXXXXX)।',
+        rating: 'অনুগ্রহ করে স্টার রেটিং দিন।',
+        duplicate: 'এই নম্বর দিয়ে ইতিমধ্যে একটি রিভিউ জমা হয়েছে। ধন্যবাদ!',
+        server: 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন, অথবা হোয়াটসঅ্যাপে মেসেজ দিন।',
+      },
+    },
     items: [
       { name: 'ইসরাত জাহান', role: 'স্কেলিং', text: 'আমার স্কেলিং খুব দ্রুত আর একদম ব্যথাহীন হয়েছে। ডাঃ আয়েশা প্রতিটি ধাপ বুঝিয়ে বলেছেন এবং বাসায় মাড়ি সুস্থ রাখার উপায় দেখিয়ে দিয়েছেন। দাঁত আগে কখনো এত পরিষ্কার লাগেনি।' },
       { name: 'রফিকুল ইসলাম', role: 'ক্রাউন', text: 'ভাঙা মাড়ির দাঁতে ক্রাউন করিয়েছি। একদম ঠিকঠাক বসেছে, দেখতে আসল দাঁতের মতোই। খুবই পেশাদার চিকিৎসা, আর সন্ধ্যার সময় হওয়ায় অফিসের পরে আসতে সুবিধা হয়েছে।' },
@@ -245,7 +290,7 @@ const bn = {
     phoneLabel: 'ফোন',
     emailLabel: 'ইমেইল',
     hoursLabel: 'চেম্বার সময়',
-    hours: 'বিকাল ৫:০০ – রাত ১০:০০',
+    hours: 'শনি – বৃহস্পতি, বিকাল ৫:০০ – রাত ১০:০০ · শুক্রবার বন্ধ',
     directions: 'দিকনির্দেশনা',
     waMessage: 'হ্যালো ডেন্ট-ও-শাইন, আমি ডাঃ আয়েশা আক্তারের সাথে একটি অ্যাপয়েন্টমেন্ট নিতে চাই।',
   },

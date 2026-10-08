@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Clock, MessageCircle, Phone, ShieldCheck, Sparkles } from 'lucide-react';
 import { useLang } from '../i18n';
 import { CONTACT, IMAGES, whatsappLink } from '../data/content';
-import { Img, useOpenStatus } from './shared';
+import { Img, useOpenStatus, statusNote } from './shared';
 
 const ease = [0.22, 1, 0.36, 1];
 const fadeUp = (delay) => ({
@@ -26,12 +26,13 @@ function useIsDesktop() {
 
 function StatusChip({ className = '' }) {
   const { t } = useLang();
-  const open = useOpenStatus();
+  const status = useOpenStatus();
+  const { open } = status;
   return (
     <div className={`status-chip ${open ? 'open' : 'closed'} ${className}`}>
       <span className="pulse" />
       {open ? t.status.open : t.status.closed}
-      <span className="muted">· {open ? t.status.closesAt : t.status.opensAt}</span>
+      <span className="muted">· {statusNote(t, status)}</span>
     </div>
   );
 }

@@ -1,12 +1,13 @@
 import { Clock, Mail, MapPin, MessageCircle, Navigation, Phone } from 'lucide-react';
 import { useLang } from '../i18n';
 import { CONTACT, whatsappLink } from '../data/content';
-import { Reveal, SectionHead, useOpenStatus } from './shared';
+import { Reveal, SectionHead, useOpenStatus, statusNote } from './shared';
 
 export default function Contact() {
   const { t, num } = useLang();
   const c = t.contact;
-  const open = useOpenStatus();
+  const status = useOpenStatus();
+  const { open } = status;
   const q = encodeURIComponent(CONTACT.mapQuery);
 
   const rows = [
@@ -25,7 +26,7 @@ export default function Contact() {
             <div className={`status-chip ${open ? 'open' : 'closed'}`}>
               <span className="pulse" />
               {open ? t.status.open : t.status.closed}
-              <span className="muted">· {open ? t.status.closesAt : t.status.opensAt}</span>
+              <span className="muted">· {statusNote(t, status)}</span>
             </div>
             <ul className="contact-rows">
               {rows.map(({ icon: Icon, label, value, href }) => (

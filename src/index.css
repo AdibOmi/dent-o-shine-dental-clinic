@@ -1399,6 +1399,153 @@ a.float-card:hover {
   background: var(--green-500);
 }
 
+.review-count {
+  min-width: 70px;
+  font-weight: 700;
+  color: var(--green-700);
+}
+
+.review-open {
+  margin-top: 30px;
+}
+
+.review-thanks {
+  margin-top: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  background: var(--green-50);
+  color: var(--green-700);
+  font-weight: 600;
+  text-align: left;
+}
+
+.review-thanks svg {
+  flex-shrink: 0;
+}
+
+.review-form {
+  margin: 34px auto 0;
+  max-width: 560px;
+  text-align: left;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 16px;
+}
+
+.review-form h3 {
+  font-size: 1.25rem;
+}
+
+.review-form label,
+.review-form .field {
+  display: grid;
+  gap: 6px;
+}
+
+.review-form label > span,
+.review-form .field > span {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.review-form input,
+.review-form textarea {
+  font: inherit;
+  /* 16px+ stops iOS from zooming into the field */
+  font-size: 1rem;
+  color: var(--ink);
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--green-200);
+  border-radius: 12px;
+  background: var(--green-50);
+  resize: vertical;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.review-form input:focus,
+.review-form textarea:focus {
+  outline: none;
+  border-color: var(--green-500);
+  background: var(--white);
+}
+
+.review-form small {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.star-picker {
+  display: flex;
+  gap: 4px;
+}
+
+.star-picker button {
+  color: var(--green-200);
+  padding: 2px;
+  transition: transform 0.15s, color 0.15s;
+}
+
+.star-picker button.on {
+  color: #f5b301;
+}
+
+.star-picker button:hover {
+  transform: scale(1.15);
+}
+
+.star-picker button:focus-visible {
+  outline: 2px solid var(--green-500);
+  border-radius: 6px;
+}
+
+.star-empty {
+  color: var(--green-200);
+}
+
+.review-form .hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.form-error {
+  color: #c0392b;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.review-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.review-form-actions .btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}
+
+@media (max-width: 640px) {
+  .review-form {
+    padding: 22px 18px;
+  }
+  .review-form-actions .btn {
+    flex: 1;
+  }
+}
+
 /* ───────────────────────── Contact ───────────────────────── */
 .contact {
   background: linear-gradient(180deg, var(--white), var(--green-50));
@@ -1866,4 +2013,22 @@ a.float-card:hover {
     transition: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ───────────────────────── Crash fallback ───────────────────────── */
+.crash {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 16px;
+  text-align: center;
+  background: var(--green-50);
+}
+
+.crash p {
+  max-width: 420px;
+  color: var(--ink-soft);
 }

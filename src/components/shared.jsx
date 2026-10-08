@@ -54,27 +54,37 @@ export function Logo({ size = 40 }) {
   );
 }
 
-function dhakaMinutes() {
+function dhakaNow() {
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Asia/Dhaka',
+    weekday: 'short',
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: 'h23',
   }).formatToParts(new Date());
-  const get = (type) => Number(parts.find((p) => p.type === type)?.value || 0);
-  return get('hour') * 60 + get('minute');
+  const get = (type) => parts.find((p) => p.type === type)?.value;
+  return { day: get('weekday'), minutes: Number(get('hour') || 0) * 60 + Number(get('minute') || 0) };
 }
+
+const checkStatus = () => {
+  const { day, minutes } = dhakaNow();
+  const friday = day === CONTACT.closedDay;
+  const open = !friday && minutes >= CONTACT.openMinutes && minutes < CONTACT.closeMinutes;
+  // Closed all Friday, so after Thursday's closing the next opening is Saturday
+  const opensSaturday = friday || (day === 'Thu' && minutes >= CONTACT.closeMinutes);
+  return { open, opensSaturday };
+};
 
 /** Live open/closed status based on Dhaka time. Re-checks every minute. */
 export function useOpenStatus() {
-  const check = () => {
-    const m = dhakaMinutes();
-    return m >= CONTACT.openMinutes && m < CONTACT.closeMinutes;
-  };
-  const [open, setOpen] = useState(check);
+  const [status, setStatus] = useState(checkStatus);
   useEffect(() => {
-    const id = setInterval(() => setOpen(check()), 60_000);
+    const id = setInterval(() => setStatus(checkStatus()), 60_000);
     return () => clearInterval(id);
   }, []);
-  return open;
+  return status;
 }
+
+/** "Closes at …" / "Opens at …" / "Opens Saturday at …" for the status chip. */
+export const statusNote = (t, { open, opensSaturday }) =>
+  open ? t.status.closesAt : opensSaturday ? t.status.opensSat : t.status.opensAt;
