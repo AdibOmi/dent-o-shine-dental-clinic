@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Activity, Baby, Crown, Scissors, ShieldCheck, Smile, Sparkles, Stethoscope } from 'lucide-react';
+import { Activity, Baby, Crown, Gem, Scissors, ShieldCheck, Smile, Sparkles, Stethoscope } from 'lucide-react';
 import { useLang } from '../i18n';
 import { IMAGES, SERVICE_KEYS } from '../data/content';
 import { Img, SectionHead } from './shared';
@@ -9,6 +9,7 @@ const ICONS = {
   rootCanal: Activity,
   implants: ShieldCheck,
   whitening: Sparkles,
+  veneers: Gem,
   scaling: Stethoscope,
   surgery: Scissors,
   crowns: Crown,

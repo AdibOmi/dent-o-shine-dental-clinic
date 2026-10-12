@@ -808,7 +808,7 @@ a.float-card:hover {
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 
@@ -1763,6 +1763,12 @@ a.float-card:hover {
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  /* Odd card count: center the last one instead of leaving it alone on the left */
+  .service-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 12px);
+  }
   .fc-1 {
     left: -6%;
   }
@@ -1943,6 +1949,10 @@ a.float-card:hover {
   .services-grid {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+  .service-card:last-child:nth-child(odd) {
+    width: auto;
+    justify-self: stretch;
   }
   .service-card {
     display: flex;

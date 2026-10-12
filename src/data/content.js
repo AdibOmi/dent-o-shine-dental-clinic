@@ -42,6 +42,7 @@ export const IMAGES = {
     rootCanal: u('1588776814546-1ffcf47267a5', 700),
     implants: u('1593022356769-11f762e25ed9', 700),
     whitening: u('1494790108377-be9c29b29330', 700, '&crop=faces'),
+    veneers: u('1580489944761-15a19d654956', 700, '&crop=faces'),
     scaling: u('1606811971618-4486d14f3f99', 700),
     surgery: u('1588776813677-77aaf5595b83', 700),
     crowns: u('1468493858157-0da44aaf1d13', 700),
@@ -77,7 +78,7 @@ IMAGES.gallery = clinicPhotos.length
 // (and a matching title/desc under results.cases in both languages).
 export const CASES = [{ key: 'braces', steps: [braces1, braces2, braces3] }];
 
-const SERVICE_KEYS = ['braces', 'rootCanal', 'implants', 'whitening', 'scaling', 'surgery', 'crowns', 'pediatric'];
+const SERVICE_KEYS = ['braces', 'rootCanal', 'implants', 'whitening', 'veneers', 'scaling', 'surgery', 'crowns', 'pediatric'];
 
 const en = {
   nav: { home: 'Home', about: 'Doctor', services: 'Services', results: 'Results', reviews: 'Reviews', contact: 'Contact' },
@@ -119,7 +120,8 @@ const en = {
       rootCanal: { title: 'Root Canal Treatment', desc: 'Save infected teeth with comfortable, virtually painless RCT.' },
       implants: { title: 'Dental Implants', desc: 'A permanent, natural-looking replacement for missing teeth.' },
       whitening: { title: 'Teeth Whitening', desc: 'Remove stains and brighten your smile by several shades.' },
-      scaling: { title: 'Scaling & Cleaning', desc: 'Remove plaque and tartar for healthy gums and fresh breath.' },
+      veneers: { title: 'Veneers', desc: 'Thin, tooth-coloured shells that fix chipped, stained or uneven teeth for a flawless smile.' },
+      scaling: { title: 'Scaling & Polishing', desc: 'Remove plaque and tartar, then polish teeth smooth for healthy gums and fresh breath.' },
       surgery: { title: 'Extraction & Oral Surgery', desc: 'Wisdom teeth and complex surgery by a trained oral surgeon.' },
       crowns: { title: 'Crowns & Bridges', desc: 'Restore broken or missing teeth with strong, tooth-coloured caps.' },
       pediatric: { title: 'Pediatric Dentistry', desc: 'Friendly, fear-free dental care designed for children.' },
@@ -230,7 +232,8 @@ const bn = {
       rootCanal: { title: 'রুট ক্যানাল ট্রিটমেন্ট', desc: 'আরামদায়ক ও প্রায় ব্যথামুক্ত চিকিৎসায় সংক্রমিত দাঁত রক্ষা করুন।' },
       implants: { title: 'ডেন্টাল ইমপ্লান্ট', desc: 'হারানো দাঁতের স্থায়ী ও প্রাকৃতিক সমাধান।' },
       whitening: { title: 'দাঁত সাদা করা', desc: 'দাগ দূর করে দাঁতকে কয়েক শেড উজ্জ্বল করুন।' },
-      scaling: { title: 'স্কেলিং ও ক্লিনিং', desc: 'পাথর ও প্লাক দূর করে সুস্থ মাড়ি ও সতেজ নিঃশ্বাস।' },
+      veneers: { title: 'ভিনিয়ার', desc: 'দাঁতের রঙের পাতলা আবরণে ভাঙা, দাগযুক্ত বা অসমান দাঁত ঠিক করে নিখুঁত হাসি।' },
+      scaling: { title: 'স্কেলিং ও পলিশিং', desc: 'পাথর ও প্লাক দূর করে দাঁত মসৃণ পলিশ — সুস্থ মাড়ি ও সতেজ নিঃশ্বাস।' },
       surgery: { title: 'দাঁত তোলা ও ওরাল সার্জারি', desc: 'আক্কেল দাঁতসহ জটিল সার্জারি প্রশিক্ষিত ওরাল সার্জনের হাতে।' },
       crowns: { title: 'ক্রাউন ও ব্রিজ', desc: 'ভাঙা বা হারানো দাঁত মজবুত ও দাঁতের রঙের ক্যাপে পুনর্গঠন।' },
       pediatric: { title: 'শিশু দন্তচিকিৎসা', desc: 'শিশুদের জন্য বন্ধুসুলভ ও ভয়মুক্ত দাঁতের চিকিৎসা।' },
