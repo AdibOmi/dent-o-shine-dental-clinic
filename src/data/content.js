@@ -167,10 +167,6 @@ const en = {
         server: 'Something went wrong. Please try again, or message us on WhatsApp.',
       },
     },
-    items: [
-      { name: 'Israt Jahan', role: 'Scaling', text: 'My scaling was quick and completely painless. Dr. Ayesha explained every step and showed me how to keep my gums healthy at home. My teeth have never felt this clean.' },
-      { name: 'Rafiqul Islam', role: 'Crown', text: 'I had a broken molar fixed with a crown. It fits perfectly and looks just like my natural teeth. Very professional care, and the evening hours were easy to manage after work.' },
-    ],
   },
   contact: {
     eyebrow: 'Visit us',
@@ -279,10 +275,6 @@ const bn = {
         server: 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন, অথবা হোয়াটসঅ্যাপে মেসেজ দিন।',
       },
     },
-    items: [
-      { name: 'ইসরাত জাহান', role: 'স্কেলিং', text: 'আমার স্কেলিং খুব দ্রুত আর একদম ব্যথাহীন হয়েছে। ডাঃ আয়েশা প্রতিটি ধাপ বুঝিয়ে বলেছেন এবং বাসায় মাড়ি সুস্থ রাখার উপায় দেখিয়ে দিয়েছেন। দাঁত আগে কখনো এত পরিষ্কার লাগেনি।' },
-      { name: 'রফিকুল ইসলাম', role: 'ক্রাউন', text: 'ভাঙা মাড়ির দাঁতে ক্রাউন করিয়েছি। একদম ঠিকঠাক বসেছে, দেখতে আসল দাঁতের মতোই। খুবই পেশাদার চিকিৎসা, আর সন্ধ্যার সময় হওয়ায় অফিসের পরে আসতে সুবিধা হয়েছে।' },
-    ],
   },
   contact: {
     eyebrow: 'আমাদের ঠিকানা',

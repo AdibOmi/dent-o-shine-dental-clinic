@@ -24,6 +24,6 @@ Everything editable is in [`src/data/content.js`](src/data/content.js):
   - `src/assets/doctor/` — doctor photo + round avatar used on the hero badge.
   - `src/assets/cases/` — patient cases (Before → During → After), listed in `CASES`.
     Keep clinical photos un-retouched; only crop them to the same frame.
-- **Reviews** — placeholder text under `reviews.items`; replace with real patient reviews.
+- **Reviews** — submitted by patients on the site and approved at `/admin`.
 - **Stats** — numbers under `stats`; adjust to real figures.
 - **Contact / hours** — the `CONTACT` object (also drives the live "Open now" badge, Dhaka time).

@@ -25,7 +25,7 @@ export default function Testimonials() {
   const { t, num } = useLang();
   const r = t.reviews;
   const patientReviews = usePatientReviews();
-  const items = [...patientReviews.map((p) => ({ ...p, role: r.patient })), ...r.items];
+  const items = patientReviews.map((p) => ({ ...p, role: r.patient }));
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
