@@ -76,12 +76,15 @@ export async function setAdminPassword(env, password) {
 }
 
 /**
- * Checks the "Authorization: Bearer <password>" header. A password set through the reset
- * flow (stored hashed in D1) wins; otherwise the ADMIN_PASSWORD secret is used.
+ * Whether `given` is the admin password. A password set through the reset flow
+ * (stored hashed in D1) wins; otherwise the ADMIN_PASSWORD secret is used.
  */
-export async function isAdmin(request, env) {
-  const given = (request.headers.get('authorization') || '').replace(/^Bearer /, '');
+export async function isAdminPassword(env, given) {
   const row = await (await db(env)).prepare(`SELECT value FROM settings WHERE key = 'admin_password'`).first();
   if (row) return safeEqual(await hashPassword(given, row.value.split(':')[0]), row.value);
   return Boolean(env.ADMIN_PASSWORD) && safeEqual(given, env.ADMIN_PASSWORD);
 }
+
+/** Checks the "Authorization: Bearer <password>" header. */
+export const isAdmin = (request, env) =>
+  isAdminPassword(env, (request.headers.get('authorization') || '').replace(/^Bearer /, ''));

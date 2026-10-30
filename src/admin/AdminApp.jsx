@@ -42,6 +42,7 @@ const ERRORS = {
 const RESET_ERRORS = {
   'wrong-recovery-key': 'That recovery key is not correct.',
   'weak-password': 'Use at least 8 characters for the new password.',
+  'same-password': 'That is already your password. Go back and log in with it.',
   'recovery-not-configured': 'ADMIN_RECOVERY_KEY is not set in the Cloudflare Pages project yet.',
 };
 
@@ -212,71 +213,102 @@ function Login({ onSubmit, error, busy }) {
   );
 }
 
+async function resetRequest(body) {
+  const res = await fetch('/api/admin/reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'server');
+}
+
 function Reset({ onDone, onCancel }) {
   const [key, setKey] = useState('');
+  const [keyOk, setKeyOk] = useState(false);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
-  const submit = async (e) => {
-    e.preventDefault();
-    if (password.length < 8) return setError(RESET_ERRORS['weak-password']);
-    if (password !== confirm) return setError('The two passwords do not match.');
+  const run = async (body, then) => {
     setError('');
     setBusy(true);
     try {
-      const res = await fetch('/api/admin/reset', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recoveryKey: key, password }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'server');
-      onDone(password);
+      await resetRequest(body);
+      then();
     } catch (err) {
+      if (err.message === 'wrong-recovery-key') setKeyOk(false);
       setError(RESET_ERRORS[err.message] || ERRORS.server);
-      setBusy(false);
     }
+    setBusy(false);
+  };
+
+  const checkKey = (e) => {
+    e.preventDefault();
+    if (key.trim()) run({ recoveryKey: key }, () => setKeyOk(true));
+  };
+
+  const save = (e) => {
+    e.preventDefault();
+    if (password.length < 8) return setError(RESET_ERRORS['weak-password']);
+    if (password !== confirm) return setError('The two passwords do not match.');
+    run({ recoveryKey: key, password }, () => onDone(password));
   };
 
   return (
     <div className="admin-login">
-      <form onSubmit={submit}>
-        <Logo size={44} />
-        <h1>Reset password</h1>
-        <p className="admin-hint">Enter the recovery key you were given when the site was set up, then choose a new password.</p>
-        <input
-          value={key}
-          onChange={(e) => setKey(e.target.value)}
-          placeholder="Recovery key"
-          autoComplete="off"
-          spellCheck={false}
-          required
-          autoFocus
-        />
-        <PasswordInput
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="New password (at least 8 characters)"
-          autoComplete="new-password"
-          required
-        />
-        <PasswordInput
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          placeholder="Type the new password again"
-          autoComplete="new-password"
-          required
-        />
-        {error && <p className="form-error">{error}</p>}
-        <button className="btn btn-primary" disabled={busy}>
-          {busy ? 'Saving…' : 'Save new password'}
-        </button>
-        <button type="button" className="admin-link" onClick={onCancel}>
-          Back to log in
-        </button>
-      </form>
+      {keyOk ? (
+        <form onSubmit={save} key="password">
+          <Logo size={44} />
+          <h1>Choose a new password</h1>
+          <p className="admin-hint">Recovery key accepted. Use at least 8 characters.</p>
+          <PasswordInput
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="New password"
+            autoComplete="new-password"
+            required
+            autoFocus
+          />
+          <PasswordInput
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            placeholder="Type it again"
+            autoComplete="new-password"
+            required
+          />
+          {error && <p className="form-error">{error}</p>}
+          <button className="btn btn-primary" disabled={busy}>
+            {busy ? 'Saving…' : 'Save new password'}
+          </button>
+          <button type="button" className="admin-link" onClick={onCancel}>
+            Back to log in
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={checkKey} key="key">
+          <Logo size={44} />
+          <h1>Reset password</h1>
+          <p className="admin-hint">Enter the recovery key you were given when the site was set up.</p>
+          <input
+            value={key}
+            onChange={(e) => setKey(e.target.value)}
+            placeholder="Recovery key"
+            autoComplete="off"
+            spellCheck={false}
+            required
+            autoFocus
+          />
+          {error && <p className="form-error">{error}</p>}
+          <button className="btn btn-primary" disabled={busy}>
+            {busy ? 'Checking…' : 'Continue'}
+          </button>
+          <button type="button" className="admin-link" onClick={onCancel}>
+            Back to log in
+          </button>
+        </form>
+      )}
     </div>
   );
 }

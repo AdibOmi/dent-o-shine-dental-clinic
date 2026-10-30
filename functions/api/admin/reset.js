@@ -1,8 +1,9 @@
 // Forgotten admin password  →  /api/admin/reset
 // Requires the ADMIN_RECOVERY_KEY secret (Pages project → Settings → Variables and Secrets).
 // Use a long random key and give it to the clinic to keep somewhere safe, e.g. on paper.
+//   POST { recoveryKey }            → only checks the key (step 1 of the form)
 //   POST { recoveryKey, password }  → saves the new password; the old one stops working
-import { json, safeEqual, setAdminPassword } from '../../../server/reviews.js';
+import { isAdminPassword, json, safeEqual, setAdminPassword } from '../../../server/reviews.js';
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -13,7 +14,9 @@ export async function onRequestPost({ request, env }) {
       await new Promise((r) => setTimeout(r, 800));
       return json({ error: 'wrong-recovery-key' }, 401);
     }
+    if (password === undefined) return json({ ok: true });
     if (typeof password !== 'string' || password.length < 8) return json({ error: 'weak-password' }, 400);
+    if (await isAdminPassword(env, password)) return json({ error: 'same-password' }, 400);
     await setAdminPassword(env, password);
     return json({ ok: true });
   } catch (err) {
