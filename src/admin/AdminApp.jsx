@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Check, EyeOff, LogOut, Phone, RefreshCw, Trash2 } from 'lucide-react';
+import { Check, Eye, EyeOff, LogOut, Phone, RefreshCw, Trash2 } from 'lucide-react';
 import { Logo } from '../components/shared';
 import { Stars } from '../components/Testimonials';
 
@@ -37,6 +37,12 @@ const ERRORS = {
   unauthorized: 'Wrong password.',
   'not-configured': 'ADMIN_PASSWORD is not set in the Cloudflare Pages project yet.',
   server: 'Could not reach the server. Check your internet and try again.',
+};
+
+const RESET_ERRORS = {
+  'wrong-recovery-key': 'That recovery key is not correct.',
+  'weak-password': 'Use at least 8 characters for the new password.',
+  'recovery-not-configured': 'ADMIN_RECOVERY_KEY is not set in the Cloudflare Pages project yet.',
 };
 
 export default function AdminApp() {
@@ -164,6 +170,19 @@ function Group({ title, empty, items, busy, children }) {
 
 function Login({ onSubmit, error, busy }) {
   const [value, setValue] = useState('');
+  const [resetting, setResetting] = useState(false);
+
+  if (resetting)
+    return (
+      <Reset
+        onDone={(p) => {
+          setResetting(false);
+          onSubmit(p);
+        }}
+        onCancel={() => setResetting(false)}
+      />
+    );
+
   return (
     <div className="admin-login">
       <form
@@ -174,8 +193,7 @@ function Login({ onSubmit, error, busy }) {
       >
         <Logo size={44} />
         <h1>Dent-O-Shine reviews</h1>
-        <input
-          type="password"
+        <PasswordInput
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Admin password"
@@ -186,7 +204,97 @@ function Login({ onSubmit, error, busy }) {
         <button className="btn btn-primary" disabled={busy}>
           {busy ? 'Checking…' : 'Log in'}
         </button>
+        <button type="button" className="admin-link" onClick={() => setResetting(true)}>
+          Forgot password?
+        </button>
       </form>
+    </div>
+  );
+}
+
+function Reset({ onDone, onCancel }) {
+  const [key, setKey] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (password.length < 8) return setError(RESET_ERRORS['weak-password']);
+    if (password !== confirm) return setError('The two passwords do not match.');
+    setError('');
+    setBusy(true);
+    try {
+      const res = await fetch('/api/admin/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recoveryKey: key, password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'server');
+      onDone(password);
+    } catch (err) {
+      setError(RESET_ERRORS[err.message] || ERRORS.server);
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="admin-login">
+      <form onSubmit={submit}>
+        <Logo size={44} />
+        <h1>Reset password</h1>
+        <p className="admin-hint">Enter the recovery key you were given when the site was set up, then choose a new password.</p>
+        <input
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          placeholder="Recovery key"
+          autoComplete="off"
+          spellCheck={false}
+          required
+          autoFocus
+        />
+        <PasswordInput
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="New password (at least 8 characters)"
+          autoComplete="new-password"
+          required
+        />
+        <PasswordInput
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          placeholder="Type the new password again"
+          autoComplete="new-password"
+          required
+        />
+        {error && <p className="form-error">{error}</p>}
+        <button className="btn btn-primary" disabled={busy}>
+          {busy ? 'Saving…' : 'Save new password'}
+        </button>
+        <button type="button" className="admin-link" onClick={onCancel}>
+          Back to log in
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function PasswordInput(props) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="pw-field">
+      <input {...props} type={show ? 'text' : 'password'} />
+      <button
+        type="button"
+        onClick={() => setShow(!show)}
+        aria-label={show ? 'Hide password' : 'Show password'}
+        aria-pressed={show}
+        title={show ? 'Hide password' : 'Show password'}
+      >
+        {show ? <EyeOff size={18} /> : <Eye size={18} />}
+      </button>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 // Shared helpers for the review API (Cloudflare Pages Functions + D1).
-// The D1 database is bound to the Pages project as `DB`; the table is created on first use.
+// The D1 database is bound to the Pages project as `DB`; the tables are created on first use.
 
 export const json = (data, status = 200, headers = {}) =>
   new Response(JSON.stringify(data), {
@@ -9,22 +9,25 @@ export const json = (data, status = 200, headers = {}) =>
 
 let tableReady = false;
 
-/** The D1 database, with the reviews table guaranteed to exist. */
+/** The D1 database, with the reviews and settings tables guaranteed to exist. */
 export async function db(env) {
   if (!env.DB) throw new Error('D1 binding "DB" is missing');
   if (!tableReady) {
-    await env.DB.prepare(
-      `CREATE TABLE IF NOT EXISTS reviews (
-        id          TEXT PRIMARY KEY,
-        name        TEXT NOT NULL,
-        phone       TEXT NOT NULL UNIQUE,
-        rating      INTEGER NOT NULL,
-        text        TEXT NOT NULL DEFAULT '',
-        status      TEXT NOT NULL DEFAULT 'pending',
-        created_at  TEXT NOT NULL,
-        approved_at TEXT
-      )`
-    ).run();
+    await env.DB.batch([
+      env.DB.prepare(
+        `CREATE TABLE IF NOT EXISTS reviews (
+          id          TEXT PRIMARY KEY,
+          name        TEXT NOT NULL,
+          phone       TEXT NOT NULL UNIQUE,
+          rating      INTEGER NOT NULL,
+          text        TEXT NOT NULL DEFAULT '',
+          status      TEXT NOT NULL DEFAULT 'pending',
+          created_at  TEXT NOT NULL,
+          approved_at TEXT
+        )`
+      ),
+      env.DB.prepare(`CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)`),
+    ]);
     tableReady = true;
   }
   return env.DB;
@@ -51,10 +54,34 @@ export const cleanText = (s, max) =>
     .slice(0, max);
 
 const sha256 = async (s) => crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(s)));
+const toHex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 
-/** Checks the "Authorization: Bearer <password>" header against the ADMIN_PASSWORD secret. */
+/** Constant-time string comparison. */
+export async function safeEqual(a, b) {
+  const [x, y] = await Promise.all([sha256(a), sha256(b)]);
+  return crypto.subtle.timingSafeEqual(x, y);
+}
+
+// Salted SHA-256 rather than a slow KDF: the hash is checked on every admin request and
+// Pages Functions on the free plan only get ~10ms of CPU. D1 is not publicly readable.
+const hashPassword = async (password, salt = toHex(crypto.getRandomValues(new Uint8Array(16)))) =>
+  `${salt}:${toHex(await sha256(salt + password))}`;
+
+/** Saves a new admin password. From then on it replaces the ADMIN_PASSWORD secret. */
+export async function setAdminPassword(env, password) {
+  await (await db(env))
+    .prepare(`INSERT OR REPLACE INTO settings (key, value) VALUES ('admin_password', ?)`)
+    .bind(await hashPassword(password))
+    .run();
+}
+
+/**
+ * Checks the "Authorization: Bearer <password>" header. A password set through the reset
+ * flow (stored hashed in D1) wins; otherwise the ADMIN_PASSWORD secret is used.
+ */
 export async function isAdmin(request, env) {
   const given = (request.headers.get('authorization') || '').replace(/^Bearer /, '');
-  const [a, b] = await Promise.all([sha256(given), sha256(env.ADMIN_PASSWORD)]);
-  return crypto.subtle.timingSafeEqual(a, b);
+  const row = await (await db(env)).prepare(`SELECT value FROM settings WHERE key = 'admin_password'`).first();
+  if (row) return safeEqual(await hashPassword(given, row.value.split(':')[0]), row.value);
+  return Boolean(env.ADMIN_PASSWORD) && safeEqual(given, env.ADMIN_PASSWORD);
 }

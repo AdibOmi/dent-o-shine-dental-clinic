@@ -27,3 +27,13 @@ Everything editable is in [`src/data/content.js`](src/data/content.js):
 - **Reviews** — submitted by patients on the site and approved at `/admin`.
 - **Stats** — numbers under `stats`; adjust to real figures.
 - **Contact / hours** — the `CONTACT` object (also drives the live "Open now" badge, Dhaka time).
+
+## Admin page (`/admin`)
+
+Set these as secrets in the Cloudflare Pages project (Settings → Variables and Secrets):
+
+- `ADMIN_PASSWORD` — the first admin password.
+- `ADMIN_RECOVERY_KEY` — a long random key (e.g. `openssl rand -hex 16`), given to the clinic to
+  keep safe on paper. If they forget the password, **Forgot password?** on the login screen
+  lets them set a new one with this key. The new password is stored hashed in D1 and replaces
+  `ADMIN_PASSWORD` from then on.
